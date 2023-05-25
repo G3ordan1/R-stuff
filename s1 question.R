@@ -1,0 +1,28 @@
+library(agricolae)
+
+hours_per_week <- c(
+    30, 27, 22, 25, 24, 25, 24, 15,
+    35, 35, 33, 52, 49, 10, 27, 18,
+    20, 23, 24, 25, 30, 24, 24, 24,
+    18, 20, 25, 37, 24, 32, 29, 27,
+    24, 27, 26, 25, 24, 28, 33, 30,
+    13, 13, 21, 28, 37, 35, 32, 33,
+    29, 31, 28, 28, 25, 29, 31
+)
+
+classes <- cut(hours_per_week, breaks = c(10, 20, 30, 40, 50, 60), right = FALSE)
+freq_table <- table(classes)
+midvalue <- c(15, 25, 35, 45, 55)
+cumfreq <- cumsum(freq_table)
+rel_freq <- prop.table(freq_table)
+df <- cbind(freq_table, midvalue, cumfreq, round(rel_freq, 2))
+
+histogram <- hist(hours_per_week, breaks = 5, freq = TRUE, ylim = c(0, 40), right = FALSE)
+rel_histogram <- hist(hours_per_week, breaks = 5, freq = FALSE, main = "Relative Frequency Histogram", right = FALSE)
+
+ogive_curve <- ogive.freq(
+    histogram,
+    col = "blue",
+    frame = FALSE,
+    xlab = "HOURS PER WEEK"
+)
