@@ -14,8 +14,8 @@ N <- 96
 
 # (i) Estimate the average repair cost per saw for the past month and its variance:
 
-#s2r <- sum((data$Total_Repair_Cost - ybar * data$Number_of_Saws)^2) / (n - 1)
-#var_ybar <- s2r / (sum(data$Number_of_Saws)^2 / n) * (1 - n / N)
+# s2r <- sum((data$Total_Repair_Cost - ybar * data$Number_of_Saws)^2) / (n - 1)
+# var_ybar <- s2r / (sum(data$Number_of_Saws)^2 / n) * (1 - n / N)
 
 sum_yi <- sum(data$Total_Repair_Cost)
 sum_mi <- sum(data$Number_of_Saws)
@@ -24,8 +24,8 @@ sum_yi2 <- sum(data$Total_Repair_Cost^2)
 sum_yimi <- sum(data$Total_Repair_Cost * data$Number_of_Saws)
 
 ybar <- sum_yi / sum_mi
-s2r <- (sum_yi2 - 2 * ybar * sum_yimi + ybar ^ 2 * sum_mi2) / (n - 1)
-var_ybar <- s2r / (sum_mi ^ 2 / n) * (1 - n / N)
+s2r <- (sum_yi2 - 2 * ybar * sum_yimi + ybar^2 * sum_mi2) / (n - 1)
+var_ybar <- s2r / (sum_mi^2 / n) * (1 - n / N)
 
 # (ii) Estimate the total amount spent by the 96 industries on band saw repairs and its variance:
 
@@ -35,10 +35,17 @@ total_cost <- N * ybar_t
 
 # Calculate the variance of the estimated total amount spent
 s2t <- 1 / (n - 1) * sum((data$Total_Repair_Cost - ybar_t)^2)
-var_total_cost <- N ^ 2 * (1 - n / N) * s2t / n
+var_total_cost <- N^2 * (1 - n / N) * s2t / n
 
+confidence_interval_total <- c(
+  total_cost - qt(0.975, 19) * sqrt(var_total_cost / 20),
+  total_cost + qt(0.975, 19) * sqrt(var_total_cost / 20)
+)
+string_confidence_interval <- paste0("(", round(confidence_interval_total[1], 2), ", ", round(confidence_interval_total[2], 2), ")")
 # Print the results
 cat("Average Repair Cost per Saw:", ybar, "\n")
 cat("Variance of Repair Costs per Saw:", var_ybar, "\n")
-cat("Estimated Total Amount Spent by 96 Industries:", ybar_t, "\n")
+cat("Estimated Total Amount Spent by 96 Industries:", total_cost, "\n")
 cat("Variance of Estimated Total Amount:", var_total_cost, "\n")
+cat("95% Confidence Interval for Total Amount Spent:", string_confidence_interval, "\n")
+cat("Bound on the Error of Estimate:", c(total_cost - 2 * sqrt(var_total_cost), total_cost + 2 * sqrt(var_total_cost)), "\n")
