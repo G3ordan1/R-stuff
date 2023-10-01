@@ -68,3 +68,10 @@ conf_int <- matrix(conf_int, nrow = 1000, ncol = 2, byrow = TRUE)
 
 
 sum(conf_int[, 1] < 150 & conf_int[, 2] > 150) / 1000
+
+a <- sort(random)[1:30]
+mean(a) + 2 * sd(a)
+a <- sort(random)[seq(1, 1000, 34)]
+mean(a) + 2 * sd(a)
+mean(a) - 2 * sd(a)
+var(samples$mean)
