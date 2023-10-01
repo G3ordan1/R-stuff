@@ -1,0 +1,129 @@
+---
+title: "Statistical computing"
+author: "Dr. Ramsamy Geordan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+  comment = ""
+)
+```
+
+Consider the Monthly Work Accident Data from Mauritius which spans over years 1991 to 2010
+and named “data” in csv format. The data is provided to you in class or can be obtained on
+moodle.
+
+(a) You are requested to draw a normal boxplot to represent the work accident data by month
+using R.
+
+(b) You are requested to draw a revised boxplot using the Tufte's principle in the theory of
+data graphics using R.
+
+Your work must contain the graphs and also the R codes used to run the graphs. You will
+present your findings to me in class as soon as you complete it.
+Hint: To be able to do part (b), you will need to investigate the following packages:
+
+(i) ggplot2
+
+(ii) ggthemes
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+library(tidyverse)
+setwd("/home/geordan/Code/drive/R scripts/Revision Stat cop")
+```
+
+```{r}
+df <- read.csv("./datasets/data - data.csv")
+glimpse(df)
+```
+
+# Boxplot
+
+```{r}
+boxplot(Accident ~ Month, data = df)
+```
+
+# Revised boxplot
+
+```{r}
+# revised boxplot
+# customize x ticks
+# customize x axis label
+
+sorted_data <- arrange(df, Month)
+sorted_data %>%
+  ggplot(aes(x = factor(Month), y = Accident, colour = factor(Month))) +
+  geom_boxplot() +
+  xlab("Month") +
+  theme_tufte() +
+  scale_x_discrete(breaks = c(1, 3, 5, 7, 9, 11), labels = c(
+    "Jan", "Mar", "May", "Jul", "Sep",
+    "Nov"
+  )) +
+  labs(colour = "Months") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+# Line graph 
+
+```{r}
+sales <- read.csv("./datasets/sales - sales.csv")
+attach(sales)
+plot(
+  sales[, 2],
+  ylim = c(0, 12000),
+  main = "Sales data for Branches for the same company
+per month",
+  xlab = "Month",
+  ylab = "Sales",
+  type = "b",
+  pch = 20,
+  xaxt = "n",
+  frame.plot = F,
+  lwd = 2
+)
+
+axis(1, at = seq(1, length(Month)), labels = Month)
+
+lines(sales[, 3], col = "red", type = "b", pch = 20, lwd = 2)
+
+lines(sales[, 4], col = "blue", type = "b", pch = 20, lwd = 2)
+
+lines(sales[, 5], col = "orange", type = "b", pch = 20, lwd = 2)
+
+legend("bottom",
+  legend = c("A", "B", "C", "D"), lwd = 2, pch = 20, col = c(
+    "black", "red", "blue",
+    "orange"
+  ), ncol = 4, bty = "n", cex = 0.8, text.col = c(
+    "black", "red", "blue",
+    "orange"
+  ), inset = 0.01
+)
+detach(sales)
+```
+
+# Pie Chart
+
+```{r}
+attach(iris)
+table1 <- table(Species)
+labs <- paste(names(table1), "\n", table1)
+pie(table1, labels = labs, main = "Pie Chart of Species")
+detach(iris)
+```
+
+# Stem and Leaf
+```{r}
+stem(faithful[, "eruptions"], scale = 1.5)
+```
+
+```{r}
+sum(between(faithful[, "eruptions"], 2.3, 2.399
+          ))
+```
