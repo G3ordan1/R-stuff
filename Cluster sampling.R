@@ -38,8 +38,8 @@ s2t <- 1 / (n - 1) * sum((data$Total_Repair_Cost - ybar_t)^2)
 var_total_cost <- N^2 * (1 - n / N) * s2t / n
 
 confidence_interval_total <- c(
-  total_cost - qt(0.975, 19) * sqrt(var_total_cost / 20),
-  total_cost + qt(0.975, 19) * sqrt(var_total_cost / 20)
+  total_cost - qt(0.975, 19) * sqrt(var_total_cost),
+  total_cost + qt(0.975, 19) * sqrt(var_total_cost)
 )
 string_confidence_interval <- paste0("(", round(confidence_interval_total[1], 2), ", ", round(confidence_interval_total[2], 2), ")")
 # Print the results
@@ -48,4 +48,23 @@ cat("Variance of Repair Costs per Saw:", var_ybar, "\n")
 cat("Estimated Total Amount Spent by 96 Industries:", total_cost, "\n")
 cat("Variance of Estimated Total Amount:", var_total_cost, "\n")
 cat("95% Confidence Interval for Total Amount Spent:", string_confidence_interval, "\n")
-cat("Bound on the Error of Estimate:", c(total_cost - 2 * sqrt(var_total_cost), total_cost + 2 * sqrt(var_total_cost)), "\n")
+
+
+random <- rnorm(1000, 150, 20)
+samples <- list("mean" = rep(0, 1000), "sd" = rep(0, 1000))
+for (i in 1:1000) {
+  sample <- sample(random, 30, replace = TRUE)
+  samples$mean[i] <- mean(sample)
+  samples$sd[i] <- sd(sample)
+}
+
+conf_int <- list(0)
+for (i in 1:1000) {
+  conf_int[[i]] <- c(samples$mean[i] - 1.96 * samples$sd[i], samples$mean[i] + 1.96 * samples$sd[i])
+}
+
+conf_int <- unlist(conf_int)
+conf_int <- matrix(conf_int, nrow = 1000, ncol = 2, byrow = TRUE)
+
+
+sum(conf_int[, 1] < 150 & conf_int[, 2] > 150) / 1000
