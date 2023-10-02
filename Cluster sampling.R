@@ -41,7 +41,13 @@ confidence_interval_total <- c(
   total_cost - qt(0.975, 19) * sqrt(var_total_cost),
   total_cost + qt(0.975, 19) * sqrt(var_total_cost)
 )
-string_confidence_interval <- paste0("(", round(confidence_interval_total[1], 2), ", ", round(confidence_interval_total[2], 2), ")")
+string_confidence_interval <- paste0(
+  "(",
+  round(confidence_interval_total[1], 2),
+  ", ",
+  round(confidence_interval_total[2], 2),
+  ")"
+)
 # Print the results
 cat("Average Repair Cost per Saw:", ybar, "\n")
 cat("Variance of Repair Costs per Saw:", var_ybar, "\n")
@@ -52,26 +58,21 @@ cat("95% Confidence Interval for Total Amount Spent:", string_confidence_interva
 
 random <- rnorm(1000, 150, 20)
 samples <- list("mean" = rep(0, 1000), "sd" = rep(0, 1000))
-for (i in 1:1000) {
-  sample <- sample(random, 30, replace = TRUE)
+for (i in 1:100000) {
+  sample <- sample(random, 10)
   samples$mean[i] <- mean(sample)
   samples$sd[i] <- sd(sample)
 }
 
 conf_int <- list(0)
-for (i in 1:1000) {
-  conf_int[[i]] <- c(samples$mean[i] - 1.96 * samples$sd[i], samples$mean[i] + 1.96 * samples$sd[i])
+for (i in 1:100000) {
+  conf_int[[i]] <- c(
+    samples$mean[i] - qt(0.975, 9) * samples$sd[i] / sqrt(10),
+    samples$mean[i] + qt(0.975, 9) * samples$sd[i] / sqrt(10)
+  )
 }
-
 conf_int <- unlist(conf_int)
-conf_int <- matrix(conf_int, nrow = 1000, ncol = 2, byrow = TRUE)
+conf_int <- matrix(conf_int, nrow = 100000, ncol = 2, byrow = TRUE)
+perc <- sum(conf_int[, 1] < 150 & conf_int[, 2] > 150) / 100000
 
-
-sum(conf_int[, 1] < 150 & conf_int[, 2] > 150) / 1000
-
-a <- sort(random)[1:30]
-mean(a) + 2 * sd(a)
-a <- sort(random)[seq(1, 1000, 34)]
-mean(a) + 2 * sd(a)
-mean(a) - 2 * sd(a)
-var(samples$mean)
+cat(perc * 100, "% of the confidence intervals contain the true mean.", sep = "")
