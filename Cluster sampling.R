@@ -74,5 +74,4 @@ for (i in 1:100000) {
 conf_int <- unlist(conf_int)
 conf_int <- matrix(conf_int, nrow = 100000, ncol = 2, byrow = TRUE)
 perc <- sum(conf_int[, 1] < 150 & conf_int[, 2] > 150) / 100000
-
 cat(perc * 100, "% of the confidence intervals contain the true mean.", sep = "")
