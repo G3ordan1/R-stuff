@@ -23,3 +23,8 @@ profit
 
 # Interest rate parity
 (r_h - r_f) / (1 + r_f) == e_t1 - e_t0
+
+# Flip it
+E <- (1 + r_f) / (1 + r_h)
+E * 150 # Gives 139.09
+1 / e_t1 # Same value

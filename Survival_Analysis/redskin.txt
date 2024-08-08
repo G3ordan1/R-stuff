@@ -1,0 +1,15 @@
+Time Group status
+15 Product 1
+16 Product 0
+17 Product 1
+18 Product 1
+13 Product 0
+16 Product 1
+10 Placebo 1
+10 Placebo 1
+12 Placebo 1
+12 Placebo 1
+11 Placebo 0
+14 Placebo 1
+15 Placebo 1
+12 Placebo 1

@@ -1,0 +1,6 @@
+Time from discharge (years) Number died in next year Number lost in next year
+tfd ndy nly
+0 130 12
+1 177 28
+2 50 18
+3 36 22
